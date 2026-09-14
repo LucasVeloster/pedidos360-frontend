@@ -163,6 +163,47 @@ export class App implements OnInit {
       });
   }
 
+  // Prueba de autorización:
+  // intenta crear un pedido usando un token que solo tiene scope "read".
+  // El backend exige "write" para POST, por lo que esperamos HTTP 403.
+  probar403(): void {
+
+    const pedidoPrueba: Pedido = {
+      cliente: 'Prueba 403',
+      producto: 'Sin permiso write',
+      cantidad: 1,
+      estado: 'Prueba'
+    };
+
+    this.pedidoService.crearPedido(pedidoPrueba)
+      .subscribe({
+
+        next: (respuesta) => {
+
+          console.log(
+            'POST permitido:',
+            respuesta
+          );
+
+          alert(
+            'La petición fue permitida. No se obtuvo 403.'
+          );
+        },
+
+        error: (error) => {
+
+          console.error(
+            'PRUEBA 403:',
+            error
+          );
+
+          alert(
+            `Prueba de autorización: HTTP ${error.status} ${error.statusText}`
+          );
+        }
+      });
+  }
+
   private checkAccount(): void {
 
     const accounts =

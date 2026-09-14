@@ -88,6 +88,18 @@
 
       }
 
+      <h3>Prueba de autorización JWT</h3>
+
+      <p>
+        Prueba de acceso a una operación que requiere el scope write.
+      </p>
+
+      <button
+        type="button"
+        (click)="probar403()">
+        Probar 403 Forbidden
+      </button>
+
       <button type="button" (click)="logout()">
         Cerrar sesión
       </button>
