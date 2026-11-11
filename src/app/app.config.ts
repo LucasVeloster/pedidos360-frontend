@@ -27,6 +27,8 @@ import { routes } from './app.routes';
 const READ_SCOPE =
   'api://ef080cc3-9d30-4a1a-89b5-c5236f9bd00d/read';
 
+const WRITE_SCOPE = 'api://ef080cc3-9d30-4a1a-89b5-c5236f9bd00d/write';
+
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
     auth: {
@@ -52,9 +54,15 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
 
   protectedResourceMap.set(
+    'http://localhost:8081/api/pedidos',
+    [READ_SCOPE, WRITE_SCOPE]
+  );
+
+  protectedResourceMap.set(
     'https://7o73gqbh0b.execute-api.us-east-1.amazonaws.com/api/pedidos',
     [READ_SCOPE]
   );
+
 
   protectedResourceMap.set(
     'https://7o73gqbh0b.execute-api.us-east-1.amazonaws.com/api/notificaciones/estado',

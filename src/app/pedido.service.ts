@@ -16,7 +16,7 @@ export interface Pedido {
 export class PedidoService {
 
   private apiUrl =
-    'https://7o73gqbh0b.execute-api.us-east-1.amazonaws.com/api/pedidos';
+    'http://localhost:8081/api/pedidos';
 
   constructor(private http: HttpClient) {}
 
