@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import {
   MsalService,
@@ -17,7 +18,7 @@ import { PedidoService, Pedido } from './pedido.service';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -92,6 +93,57 @@ export class App implements OnInit {
     });
   }
 
+  // Formulario de pedidos para demostracion en vivo
+  nuevoPedido: Pedido = {
+    cliente: '',
+    producto: '',
+    cantidad: 1,
+    estado: 'CREADO'
+  };
+
+  creandoPedido = signal(false);
+
+  crearNuevoPedido(): void {
+
+    if (
+      !this.nuevoPedido.cliente.trim() ||
+      !this.nuevoPedido.producto.trim() ||
+      !Number.isInteger(Number(this.nuevoPedido.cantidad)) ||
+      Number(this.nuevoPedido.cantidad) < 1
+    ) {
+      this.mensaje.set('Completa correctamente los datos del pedido.');
+      return;
+    }
+
+    this.creandoPedido.set(true);
+    this.mensaje.set('Creando pedido...');
+
+    this.pedidoService.crearPedido({ ...this.nuevoPedido })
+      .subscribe({
+        next: (pedido) => {
+          this.creandoPedido.set(false);
+          this.mensaje.set(
+            `Pedido #${pedido.id} creado correctamente. Evento enviado al backend.`
+          );
+
+          this.nuevoPedido = {
+            cliente: '',
+            producto: '',
+            cantidad: 1,
+            estado: 'CREADO'
+          };
+
+          this.cargarPedidos();
+        },
+        error: (error) => {
+          this.creandoPedido.set(false);
+          this.mensaje.set(
+            `Error al crear pedido. HTTP ${error.status}`
+          );
+          console.error('Error creando pedido:', error);
+        }
+      });
+  }
   cargarPedidos(): void {
 
     this.mensaje.set('Cargando pedidos...');
@@ -163,7 +215,7 @@ export class App implements OnInit {
       });
   }
 
-  // Prueba de autorización:
+  // Prueba de autorizaciÃƒÆ’Ã‚Â³n:
   // intenta crear un pedido usando un token que solo tiene scope "read".
   // El backend exige "write" para POST, por lo que esperamos HTTP 403.
   probar403(): void {
@@ -186,7 +238,7 @@ export class App implements OnInit {
           );
 
           alert(
-            'La petición fue permitida. No se obtuvo 403.'
+            'La peticiÃƒÆ’Ã‚Â³n fue permitida. No se obtuvo 403.'
           );
         },
 
@@ -198,7 +250,7 @@ export class App implements OnInit {
           );
 
           alert(
-            `Prueba de autorización: HTTP ${error.status} ${error.statusText}`
+            `Prueba de autorizaciÃƒÆ’Ã‚Â³n: HTTP ${error.status} ${error.statusText}`
           );
         }
       });
@@ -301,5 +353,25 @@ export class App implements OnInit {
 
       console.log('NO HAY USUARIO');
     }
+  }
+
+  probarAdminRabbit(): void {
+    this.mensaje.set('Probando administracion de RabbitMQ...');
+
+    this.http.post(
+      'http://localhost:8083/api/admin/colas/prueba-presentacion-360',
+      null,
+      { responseType: 'text' }
+    ).subscribe({
+      next: (respuesta) => {
+        this.mensaje.set(respuesta);
+        alert('RabbitMQ Admin: ' + respuesta);
+      },
+      error: (error) => {
+        this.mensaje.set('Error Admin HTTP ' + error.status);
+        console.error('Error en Admin:', error);
+        alert('Error Admin HTTP ' + error.status);
+      }
+    });
   }
 }

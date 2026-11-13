@@ -6,15 +6,17 @@
 
     @if (!isLoggedIn()) {
 
-      <p>Inicia sesión con tu cuenta Microsoft</p>
+      <p>Inicia sesiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n con tu cuenta Microsoft</p>
 
-      <button type="button" (click)="login()">
-        Iniciar sesión
+      
+
+<button type="button" (click)="login()">
+        Iniciar sesiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n
       </button>
 
     } @else {
 
-      <h2>¡Bienvenido!</h2>
+      <h2>ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡Bienvenido!</h2>
 
       <p>Usuario autenticado:</p>
       <strong>{{ username() }}</strong>
@@ -42,7 +44,9 @@
 
       <h3>Microservicio de Pedidos</h3>
 
-      <button type="button" (click)="cargarPedidos()">
+      
+
+<button type="button" (click)="cargarPedidos()">
         Consultar pedidos
       </button>
 
@@ -73,7 +77,9 @@
 
       <h3>Microservicio de Notificaciones</h3>
 
-      <button
+      
+
+<button
         type="button"
         (click)="consultarNotificaciones()">
         Consultar notificaciones
@@ -88,20 +94,71 @@
 
       }
 
-      <h3>Prueba de autorización JWT</h3>
+      <h3>Prueba de autorizaciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n JWT</h3>
 
       <p>
-        Prueba de acceso a una operación que requiere el scope write.
+        Prueba de acceso a una operaciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n que requiere el scope write.
       </p>
 
-      <button
+      
+
+<button
         type="button"
         (click)="probar403()">
         Probar 403 Forbidden
       </button>
 
-      <button type="button" (click)="logout()">
-        Cerrar sesión
+      
+
+<section class="formulario-pedidos">
+  <h2>Crear nuevo pedido</h2>
+  <p>Ingresa los datos para enviar el pedido a Spring Boot, Kafka y RabbitMQ.</p>
+
+  <form (ngSubmit)="crearNuevoPedido()">
+
+    <label for="cliente">Cliente</label>
+    <input
+      id="cliente"
+      name="cliente"
+      type="text"
+      [(ngModel)]="nuevoPedido.cliente"
+      required
+      placeholder="Nombre del cliente"
+    />
+
+    <label for="producto">Producto</label>
+    <input
+      id="producto"
+      name="producto"
+      type="text"
+      [(ngModel)]="nuevoPedido.producto"
+      required
+      placeholder="Nombre del producto"
+    />
+
+    <label for="cantidad">Cantidad</label>
+    <input
+      id="cantidad"
+      name="cantidad"
+      type="number"
+      [(ngModel)]="nuevoPedido.cantidad"
+      required
+      min="1"
+    />
+
+    <button
+      type="submit"
+      [disabled]="creandoPedido() || !isLoggedIn()">
+      {{ creandoPedido() ? 'Creando pedido...' : 'Crear pedido' }}
+    </button>
+
+  </form>
+</section>
+<button type="button" (click)="probarAdminRabbit()">
+  Probar Admin RabbitMQ
+</button>
+<button type="button" (click)="logout()">
+        Cerrar sesiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n
       </button>
 
     }

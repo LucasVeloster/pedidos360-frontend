@@ -69,6 +69,10 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     [READ_SCOPE]
   );
 
+  protectedResourceMap.set(
+    'http://localhost:8083/api/admin/colas/*',
+    [READ_SCOPE, WRITE_SCOPE]
+  );
   return {
     interactionType: InteractionType.Redirect,
     protectedResourceMap
